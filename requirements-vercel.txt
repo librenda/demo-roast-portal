@@ -1,0 +1,9 @@
+# Vercel serverless functions don't need Flask
+# If using Vercel KV (recommended), install:
+# vercel-kv
+
+# For local testing, you can use the Flask server (server.py)
+# which requires:
+# Flask==3.0.0
+# flask-cors==4.0.0
+

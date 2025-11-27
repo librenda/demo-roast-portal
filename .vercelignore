@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.env.local
+judge_data.json
+server.py
+start_server.sh
+README.md
+VERCEL_DEPLOY.md
+

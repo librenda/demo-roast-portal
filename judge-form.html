@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akato Pitch Roast Judging Rubric</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .presenter-info {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 35px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-group label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .input-group.prominent label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        
+        .input-group input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group.prominent input {
+            padding: 14px;
+            border: 2px solid #667eea;
+            background: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .criteria-section {
+            margin-bottom: 35px;
+        }
+        
+        .criteria-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .criteria-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .criteria-description {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .rating-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .rating-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .rating-btn:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+        }
+        
+        .rating-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .notes-area {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        
+        .notes-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .red-x-section {
+            background: #fff5f5;
+            border: 2px solid #fc8181;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 35px;
+        }
+        
+        .red-x-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #c53030;
+            margin-bottom: 10px;
+        }
+        
+        .red-x-description {
+            color: #742a2a;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .x-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .x-btn {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #fc8181;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fc8181;
+            transition: all 0.3s;
+        }
+        
+        .x-btn:hover {
+            background: #fed7d7;
+        }
+        
+        .x-btn.active {
+            background: #fc8181;
+            color: white;
+        }
+        
+        .overall-notes {
+            margin-bottom: 30px;
+        }
+        
+        .overall-notes label {
+            display: block;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .print-btn {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .print-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .submit-btn:hover {
+            background: #38a169;
+        }
+        
+        .submit-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+        
+        .export-btn {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .export-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 2px solid #48bb78;
+        }
+        
+        .status-message.error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 2px solid #fc8181;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            .print-btn {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .presenter-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .rating-container {
+                flex-direction: column;
+            }
+            
+            .rating-btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+
+    <!-- Shared storage API - uses server API, falls back to localStorage -->
+    <script>
+    if (!window.storage) {
+        // Use current origin for API (works for both localhost and Vercel)
+        const API_BASE = window.location.origin;
+        
+        window.storage = {
+            async list(prefix = '', includeValues = false) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/storage/list`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prefix, includeValues })
+                    });
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (error) {
+                    console.warn('API unavailable, using localStorage fallback:', error);
+                }
+                
+                // Fallback to localStorage
+                const keys = [];
+                const items = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (!prefix || k.startsWith(prefix)) {
+                        keys.push(k);
+                        if (includeValues) {
+                            items.push({ key: k, value: localStorage.getItem(k) });
+                        }
+                    }
+                }
+                const result = { keys };
+                if (includeValues) result.items = items;
+                return result;
+            },
+            async get(key) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/storage/get`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key })
+                    });
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (error) {
+                    console.warn('API unavailable, using localStorage fallback:', error);
+                }
+                
+                // Fallback to localStorage
+                const value = localStorage.getItem(key);
+                return { value };
+            },
+            async set(key, value) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/storage/set`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key, value })
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            return true;
+                        }
+                    }
+                } catch (error) {
+                    console.warn('API unavailable, using localStorage fallback:', error);
+                }
+                
+                // Fallback to localStorage
+                localStorage.setItem(key, value);
+                return true;
+            },
+            async delete(key) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/storage/delete`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key })
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            return true;
+                        }
+                    }
+                } catch (error) {
+                    console.warn('API unavailable, using localStorage fallback:', error);
+                }
+                
+                // Fallback to localStorage
+                localStorage.removeItem(key);
+                return true;
+            }
+        };
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Akatos Fall Showcase - Pitch Roast Judging Rubric</h1>
+        <p class="subtitle">December 2, 2025 | 3-6pm</p>
+        
+        <div class="presenter-info">
+            <div class="input-group">
+                <label for="judge">Judge Name</label>
+                <input type="text" id="judge" placeholder="Enter your name">
+            </div>
+            <div class="info-row">
+                <div class="input-group prominent">
+                    <label for="presenter">Presenter Name</label>
+                    <input type="text" id="presenter" placeholder="Enter presenter name">
+                </div>
+                <div class="input-group prominent">
+                    <label for="company">Company/Project Name</label>
+                    <input type="text" id="company" placeholder="Enter company or project name">
+                </div>
+            </div>
+        </div>
+
+        <div class="red-x-section">
+            <div class="red-x-header">🚫 Red X (One Per Judge)</div>
+            <p class="red-x-description">Click once if pitch is boring. Pitch stops when 3 judges give red Xs.</p>
+            <div class="x-buttons">
+                <button class="x-btn" id="myXBtn" onclick="toggleMyX()">X</button>
+            </div>
+            <div id="xCounter" style="margin-top: 15px; font-weight: 600; color: #742a2a;">
+                Total Red Xs: <span id="totalXs">0</span> / 3
+            </div>
+        </div>
+
+        <div class="criteria-section">
+            <div class="criteria-header">
+                <span class="criteria-title">1. Narrative</span>
+            </div>
+            <p class="criteria-description">Is the storytelling good? Does the pitch flow logically and compellingly?</p>
+            <div class="rating-container" data-criteria="narrative">
+                <button class="rating-btn" data-score="1">1 - Weak</button>
+                <button class="rating-btn" data-score="2">2 - Below Avg</button>
+                <button class="rating-btn" data-score="3">3 - Average</button>
+                <button class="rating-btn" data-score="4">4 - Good</button>
+                <button class="rating-btn" data-score="5">5 - Excellent</button>
+            </div>
+            <textarea class="notes-area" placeholder="Notes on narrative..."></textarea>
+        </div>
+
+        <div class="criteria-section">
+            <div class="criteria-header">
+                <span class="criteria-title">2. Delivery</span>
+            </div>
+            <p class="criteria-description">Are they speaking confidently? Do they sound highly knowledgeable about their area?</p>
+            <div class="rating-container" data-criteria="delivery">
+                <button class="rating-btn" data-score="1">1 - Weak</button>
+                <button class="rating-btn" data-score="2">2 - Below Avg</button>
+                <button class="rating-btn" data-score="3">3 - Average</button>
+                <button class="rating-btn" data-score="4">4 - Good</button>
+                <button class="rating-btn" data-score="5">5 - Excellent</button>
+            </div>
+            <textarea class="notes-area" placeholder="Notes on delivery..."></textarea>
+        </div>
+
+        <div class="criteria-section">
+            <div class="criteria-header">
+                <span class="criteria-title">3. Idea</span>
+            </div>
+            <p class="criteria-description">Are they pitching an ambitious and investible idea? (For projects: Are they working on a technically challenging or interesting area?)</p>
+            <div class="rating-container" data-criteria="idea">
+                <button class="rating-btn" data-score="1">1 - Weak</button>
+                <button class="rating-btn" data-score="2">2 - Below Avg</button>
+                <button class="rating-btn" data-score="3">3 - Average</button>
+                <button class="rating-btn" data-score="4">4 - Good</button>
+                <button class="rating-btn" data-score="5">5 - Excellent</button>
+            </div>
+            <textarea class="notes-area" placeholder="Notes on the idea..."></textarea>
+        </div>
+
+        <div class="criteria-section">
+            <div class="criteria-header">
+                <span class="criteria-title">4. Problem/Market Fit</span>
+            </div>
+            <p class="criteria-description">Did they make something people want? Are they solving a real problem?</p>
+            <div class="rating-container" data-criteria="problem">
+                <button class="rating-btn" data-score="1">1 - Weak</button>
+                <button class="rating-btn" data-score="2">2 - Below Avg</button>
+                <button class="rating-btn" data-score="3">3 - Average</button>
+                <button class="rating-btn" data-score="4">4 - Good</button>
+                <button class="rating-btn" data-score="5">5 - Excellent</button>
+            </div>
+            <textarea class="notes-area" placeholder="Notes on problem/market fit..."></textarea>
+        </div>
+
+        <div class="overall-notes">
+            <label>Overall Feedback & Recommendations</label>
+            <textarea class="notes-area" id="overall-feedback" style="min-height: 120px;" placeholder="Provide immediate feedback for the pitcher. What worked well? What needs improvement?"></textarea>
+        </div>
+
+        <div class="status-message" id="statusMessage"></div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitScores()">💾 Submit Scores to Database</button>
+        <button class="export-btn" onclick="exportCurrentRubric()">📥 Export This Rubric as CSV</button>
+    </div>
+
+    <script>
+        let scores = {
+            narrative: null,
+            delivery: null,
+            idea: null,
+            problem: null
+        };
+
+        let currentPitchId = null;
+        let myXGiven = false;
+        let checkXInterval = null;
+
+        // Rating buttons
+        document.querySelectorAll('.rating-container').forEach(container => {
+            const criteria = container.getAttribute('data-criteria');
+            container.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    container.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    scores[criteria] = parseInt(this.getAttribute('data-score'));
+                });
+            });
+        });
+
+        async function initializePitchSession() {
+            const company = document.getElementById('company').value.trim();
+            if (company) {
+                // Use normalized company name as pitch ID so all judges share the same ID
+                currentPitchId = `pitch_${company.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+                checkXCountContinuously();
+            }
+        }
+
+        async function toggleMyX() {
+            const judge = document.getElementById('judge').value.trim();
+            const company = document.getElementById('company').value.trim();
+            
+            if (!judge) {
+                alert('Please enter your judge name first');
+                return;
+            }
+            
+            if (!company) {
+                alert('Please enter company name first to start tracking Xs');
+                return;
+            }
+            
+            if (!currentPitchId) {
+                await initializePitchSession();
+            }
+            
+            const xBtn = document.getElementById('myXBtn');
+            myXGiven = !myXGiven;
+            xBtn.classList.toggle('active');
+            
+            try {
+                const xKey = `${currentPitchId}_x_${judge.replace(/\s+/g, '_')}`;
+                
+                if (myXGiven) {
+                    await window.storage.set(xKey, 'true');
+                } else {
+                    await window.storage.delete(xKey);
+                }
+                
+                await checkXCount();
+            } catch (error) {
+                console.error('Error toggling X:', error);
+            }
+        }
+
+        async function checkXCount() {
+            if (!currentPitchId) return;
+            
+            try {
+                // Use current origin for API
+                const API_BASE = window.location.origin;
+                
+                let xCount = 0;
+                try {
+                    const response = await fetch(`${API_BASE}/api/red-x/list`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prefix: `${currentPitchId}_x_` })
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        xCount = result && result.keys ? result.keys.length : 0;
+                    }
+                } catch (error) {
+                    // Fallback to storage API
+                    const result = await window.storage.list(`${currentPitchId}_x_`, true);
+                    xCount = result && result.keys ? result.keys.length : 0;
+                }
+                
+                document.getElementById('totalXs').textContent = xCount;
+                
+                if (xCount >= 3) {
+                    alert('⚠️ PITCH STOPPED - 3 Red Xs reached!');
+                    if (checkXInterval) {
+                        clearInterval(checkXInterval);
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking X count:', error);
+            }
+        }
+
+        function checkXCountContinuously() {
+            if (checkXInterval) {
+                clearInterval(checkXInterval);
+            }
+            checkXInterval = setInterval(checkXCount, 2000);
+        }
+
+        document.getElementById('company').addEventListener('input', function() {
+            if (this.value.trim() && !currentPitchId) {
+                initializePitchSession();
+            }
+        });
+
+        async function submitScores() {
+            const submitBtn = document.getElementById('submitBtn');
+            
+            const judge = document.getElementById('judge').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const presenter = document.getElementById('presenter').value.trim();
+            
+            if (!judge || !company || !presenter) {
+                showStatus('Please fill in Judge Name, Presenter Name, and Company/Project Name', 'error');
+                return;
+            }
+            
+            if (!scores.narrative || !scores.delivery || !scores.idea || !scores.problem) {
+                showStatus('Please provide ratings for all four criteria', 'error');
+                return;
+            }
+            
+            const notes = {};
+            document.querySelectorAll('.criteria-section').forEach((section, index) => {
+                const criteriaNames = ['narrative', 'delivery', 'idea', 'problem'];
+                const textarea = section.querySelector('.notes-area');
+                notes[criteriaNames[index]] = textarea ? textarea.value : '';
+            });
+            
+            const overallFeedback = document.getElementById('overall-feedback').value;
+            
+            const submissionData = {
+                judge,
+                company,
+                presenter,
+                scores,
+                notes,
+                overallFeedback,
+                myXGiven,
+                timestamp: new Date().toISOString()
+            };
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Submitting...';
+            
+            try {
+                const key = `submission_${Date.now()}_${judge.replace(/\s+/g, '_')}`;
+                const result = await window.storage.set(key, JSON.stringify(submissionData));
+                
+                if (result) {
+                    showStatus('✅ Scores submitted successfully!', 'success');
+                    submitBtn.textContent = '✓ Submitted';
+                    
+                    setTimeout(() => {
+                        if (confirm('Scores submitted! Ready to score the next pitch?')) {
+                            resetForm();
+                        }
+                    }, 2000);
+                } else {
+                    throw new Error('Storage operation failed');
+                }
+            } catch (error) {
+                console.error('Error submitting scores:', error);
+                showStatus('❌ Error submitting scores. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '💾 Submit Scores to Database';
+            }
+        }
+        
+        function showStatus(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        function resetForm() {
+            document.getElementById('company').value = '';
+            document.getElementById('presenter').value = '';
+            document.getElementById('overall-feedback').value = '';
+            
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+            
+            document.querySelectorAll('.notes-area').forEach(textarea => {
+                if (textarea.id !== 'overall-feedback') {
+                    textarea.value = '';
+                }
+            });
+            
+            document.getElementById('myXBtn').classList.remove('active');
+            myXGiven = false;
+            currentPitchId = null;
+            document.getElementById('totalXs').textContent = '0';
+            
+            if (checkXInterval) {
+                clearInterval(checkXInterval);
+                checkXInterval = null;
+            }
+            
+            scores = {
+                narrative: null,
+                delivery: null,
+                idea: null,
+                problem: null
+            };
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+            submitBtn.textContent = '💾 Submit Scores to Database';
+            
+            document.getElementById('statusMessage').style.display = 'none';
+        }
+
+        function exportCurrentRubric() {
+            const judge = document.getElementById('judge').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const presenter = document.getElementById('presenter').value.trim();
+            
+            if (!company || !presenter) {
+                alert('Please fill in at least Company and Presenter names to export');
+                return;
+            }
+            
+            let csv = 'Field,Value\n';
+            csv += `Judge,"${judge}"\n`;
+            csv += `Company,"${company}"\n`;
+            csv += `Presenter,"${presenter}"\n`;
+            csv += `Narrative Score,${scores.narrative || 'Not rated'}\n`;
+            csv += `Delivery Score,${scores.delivery || 'Not rated'}\n`;
+            csv += `Idea Score,${scores.idea || 'Not rated'}\n`;
+            csv += `Problem/Market Score,${scores.problem || 'Not rated'}\n`;
+            
+            const criteriaNames = ['narrative', 'delivery', 'idea', 'problem'];
+            document.querySelectorAll('.criteria-section').forEach((section, index) => {
+                const textarea = section.querySelector('.notes-area');
+                const note = (textarea ? textarea.value : '').replace(/"/g, '""');
+                csv += `${criteriaNames[index].charAt(0).toUpperCase() + criteriaNames[index].slice(1)} Notes,"${note}"\n`;
+            });
+            
+            const overallFeedback = document.getElementById('overall-feedback').value.replace(/"/g, '""');
+            csv += `Overall Feedback,"${overallFeedback}"\n`;
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `rubric_${company.replace(/\s+/g, '_')}_${Date.now()}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
+
