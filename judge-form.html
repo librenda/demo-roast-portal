@@ -173,6 +173,19 @@
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 35px;
+            transition: all 0.3s;
+        }
+        
+        .red-x-section.stopped {
+            background: #fed7d7;
+            border-color: #c53030;
+            border-width: 3px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
         
         .red-x-header {
@@ -620,6 +633,7 @@
                 const API_BASE = window.location.origin;
                 
                 let xCount = 0;
+                let xKeys = [];
                 try {
                     const response = await fetch(`${API_BASE}/api/red-x/list`, {
                         method: 'POST',
@@ -628,20 +642,61 @@
                     });
                     if (response.ok) {
                         const result = await response.json();
-                        xCount = result && result.keys ? result.keys.length : 0;
+                        xKeys = result && result.keys ? result.keys : [];
+                        xCount = xKeys.length;
                     }
                 } catch (error) {
                     // Fallback to storage API
                     const result = await window.storage.list(`${currentPitchId}_x_`, true);
-                    xCount = result && result.keys ? result.keys.length : 0;
+                    xKeys = result && result.keys ? result.keys : [];
+                    xCount = xKeys.length;
                 }
                 
                 document.getElementById('totalXs').textContent = xCount;
                 
+                // Check if current judge already gave an X
+                const judge = document.getElementById('judge').value.trim();
+                if (judge) {
+                    const judgeXKey = `${currentPitchId}_x_${judge.replace(/\s+/g, '_')}`;
+                    const hasGivenX = xKeys.includes(judgeXKey);
+                    if (hasGivenX !== myXGiven) {
+                        myXGiven = hasGivenX;
+                        const xBtn = document.getElementById('myXBtn');
+                        if (hasGivenX) {
+                            xBtn.classList.add('active');
+                        } else {
+                            xBtn.classList.remove('active');
+                        }
+                    }
+                }
+                
+                // Show warning if pitch is stopped
+                const xCounter = document.getElementById('xCounter');
+                const redXSection = document.querySelector('.red-x-section');
+                
                 if (xCount >= 3) {
-                    alert('⚠️ PITCH STOPPED - 3 Red Xs reached!');
+                    xCounter.style.color = '#c53030';
+                    xCounter.style.fontWeight = '700';
+                    xCounter.innerHTML = `⚠️ PITCH STOPPED - <span id="totalXs">${xCount}</span> / 3 Red Xs`;
+                    if (redXSection) {
+                        redXSection.classList.add('stopped');
+                    }
                     if (checkXInterval) {
                         clearInterval(checkXInterval);
+                    }
+                } else if (xCount >= 2) {
+                    xCounter.style.color = '#ed8936';
+                    xCounter.style.fontWeight = '600';
+                    xCounter.innerHTML = `⚠️ Warning: <span id="totalXs">${xCount}</span> / 3 Red Xs`;
+                    if (redXSection) {
+                        redXSection.classList.remove('stopped');
+                    }
+                } else {
+                    xCounter.style.color = '#742a2a';
+                    xCounter.style.fontWeight = '600';
+                    xCounter.innerHTML = `Total Red Xs: <span id="totalXs">${xCount}</span> / 3`;
+                    if (redXSection) {
+                        redXSection.classList.remove('stopped');
                     }
                 }
             } catch (error) {
@@ -658,6 +713,34 @@
 
         document.getElementById('company').addEventListener('input', function() {
             if (this.value.trim() && !currentPitchId) {
+                initializePitchSession();
+            } else if (this.value.trim() && currentPitchId) {
+                // Re-initialize if company name changes
+                const newPitchId = `pitch_${this.value.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+                if (newPitchId !== currentPitchId) {
+                    currentPitchId = newPitchId;
+                    myXGiven = false;
+                    document.getElementById('myXBtn').classList.remove('active');
+                    checkXCountContinuously();
+                }
+            }
+        });
+        
+        // Initialize X count check when judge name is entered (if company already exists)
+        document.getElementById('judge').addEventListener('input', function() {
+            const company = document.getElementById('company').value.trim();
+            if (company && !currentPitchId) {
+                initializePitchSession();
+            } else if (company && currentPitchId) {
+                // Check if this judge already gave an X
+                checkXCount();
+            }
+        });
+        
+        // Initial check on page load if fields are pre-filled
+        window.addEventListener('load', function() {
+            const company = document.getElementById('company').value.trim();
+            if (company) {
                 initializePitchSession();
             }
         });
@@ -753,7 +836,12 @@
             document.getElementById('myXBtn').classList.remove('active');
             myXGiven = false;
             currentPitchId = null;
-            document.getElementById('totalXs').textContent = '0';
+            
+            // Reset X counter display
+            const xCounter = document.getElementById('xCounter');
+            xCounter.style.color = '#742a2a';
+            xCounter.style.fontWeight = '600';
+            xCounter.innerHTML = 'Total Red Xs: <span id="totalXs">0</span> / 3';
             
             if (checkXInterval) {
                 clearInterval(checkXInterval);
