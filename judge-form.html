@@ -217,6 +217,9 @@
             font-weight: 700;
             color: #fc8181;
             transition: all 0.3s;
+            pointer-events: auto;
+            position: relative;
+            z-index: 10;
         }
         
         .x-btn:hover {
@@ -226,6 +229,11 @@
         .x-btn.active {
             background: #fc8181;
             color: white;
+        }
+        
+        .x-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .overall-notes {
@@ -589,6 +597,13 @@
         }
 
         async function toggleMyX() {
+            const xBtn = document.getElementById('myXBtn');
+            
+            // Prevent multiple rapid clicks
+            if (xBtn.disabled) {
+                return;
+            }
+            
             const judge = document.getElementById('judge').value.trim();
             const company = document.getElementById('company').value.trim();
             
@@ -606,7 +621,10 @@
                 await initializePitchSession();
             }
             
-            const xBtn = document.getElementById('myXBtn');
+            // Temporarily disable button during update
+            xBtn.disabled = true;
+            
+            // Update local state immediately for responsive UI
             myXGiven = !myXGiven;
             xBtn.classList.toggle('active');
             
@@ -619,9 +637,17 @@
                     await window.storage.delete(xKey);
                 }
                 
+                // Re-enable button after update
+                xBtn.disabled = false;
+                
+                // Update count (but don't let it override our state)
                 await checkXCount();
             } catch (error) {
                 console.error('Error toggling X:', error);
+                // Revert state on error
+                myXGiven = !myXGiven;
+                xBtn.classList.toggle('active');
+                xBtn.disabled = false;
             }
         }
 
@@ -654,14 +680,14 @@
                 
                 document.getElementById('totalXs').textContent = xCount;
                 
-                // Check if current judge already gave an X
+                // Check if current judge already gave an X (only update if button is not disabled/being clicked)
                 const judge = document.getElementById('judge').value.trim();
-                if (judge) {
+                const xBtn = document.getElementById('myXBtn');
+                if (judge && !xBtn.disabled) {
                     const judgeXKey = `${currentPitchId}_x_${judge.replace(/\s+/g, '_')}`;
                     const hasGivenX = xKeys.includes(judgeXKey);
                     if (hasGivenX !== myXGiven) {
                         myXGiven = hasGivenX;
-                        const xBtn = document.getElementById('myXBtn');
                         if (hasGivenX) {
                             xBtn.classList.add('active');
                         } else {
@@ -681,6 +707,8 @@
                     if (redXSection) {
                         redXSection.classList.add('stopped');
                     }
+                    // Don't disable the button, but you can still toggle your X
+                    // Just stop the continuous checking
                     if (checkXInterval) {
                         clearInterval(checkXInterval);
                     }
